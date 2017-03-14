@@ -1,4 +1,4 @@
-# nome indefinido
+# MAAS: SEPARATE THE POLYGONS
 ScrumMaster: Jean
 
 Integrantes: Anderson Frare, Camila, Isabelle, Julia
