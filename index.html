@@ -1,0 +1,180 @@
+﻿<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Documento sem título</title>
+
+<script src="js/phaser.min.js"></script>
+<script src="js/ninja.js"></script>
+</head>
+<script>
+
+var numero;
+function gerar_posicao(){
+	
+	return(Math.floor(Math.random() * 800));
+		
+}
+
+function gerar_numero(){
+	
+	return(Math.floor(Math.random() * 3));
+		
+}
+
+var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create });
+
+function preload() {
+	
+	game.load.image('poligono0', 'images/poligono1.png');
+	game.load.image('poligono1', 'images/poligono2.png');
+	game.load.image('poligono2', 'images/poligono3.png');
+	game.load.image('poligono3', 'images/poligono3.png');
+    game.load.image('background', 'images/fundo.jpg');
+	game.load.image('balde', 'images/balde.png');
+
+}
+
+var sprite;
+var text;
+var text2;
+var text3;
+var w = 800, h = 600;
+
+function create() {
+
+    var background = game.add.tileSprite(0, 0, 800, 600, "background");
+
+    game.physics.startSystem(Phaser.Physics.ARCADE);
+	
+	game.stage.disableVisibilityChange = true;
+	
+	balde1 = game.add.sprite(110, 475, 'balde');
+    balde1.name = 'balde 1';
+	game.physics.enable(balde1, Phaser.Physics.ARCADE);
+	balde1.body.collideWorldBounds = true;
+	balde1.body.checkCollision = true;
+	balde1.body.immovable = true;
+		
+	balde2 = game.add.sprite(340, 475, 'balde');
+    balde2.name = 'balde 2';
+	game.physics.enable(balde2, Phaser.Physics.ARCADE);
+	balde2.body.collideWorldBounds = true;
+	balde2.body.immovable = true;
+		
+	balde3 = game.add.sprite(570, 475, 'balde');
+    balde3.name = 'balde 3';
+	game.physics.enable(balde3, Phaser.Physics.ARCADE);
+	balde3.body.collideWorldBounds = true;
+	balde3.body.immovable = true;
+ 	
+	/*----------- TEXTOS ------------*/
+	
+	text = game.add.text(165, 545, '  4  ');
+    text.anchor.set(0.5);
+    text.align = 'left';
+	
+    text.font = 'Arial Black';
+    text.fontSize = 40;
+    text.fontWeight = 'bold';
+    text.fill = '#000';
+	
+	text = game.add.text(395, 545, '  3  ');
+    text.anchor.set(0.5);
+    text.align = 'left';
+
+    text.font = 'Arial Black';
+    text.fontSize = 40;
+    text.fontWeight = 'bold';
+    text.fill = '#000';
+	
+	text = game.add.text(625, 545, '  6  ');
+    text.anchor.set(0.5);
+    text.align = 'left';
+
+    text.font = 'Arial Black';
+    text.fontSize = 40;
+    text.fontWeight = 'bold';
+    text.fill = '#000';
+
+	/*----------- /TEXTOS ------------*/
+	
+	pause_label = game.add.text(w - 100, 20, 'Pause', { font: '24px Arial', fill: '#fff' });
+    pause_label.inputEnabled = true;
+    pause_label.events.onInputUp.add(function () {
+        game.paused = true;
+
+    });
+	
+    game.input.onDown.add(unpause, self);
+	
+    function unpause(event){
+                game.paused = false;
+    };
+	
+	for(i = 0; i < 20; i++){
+		
+		valor = i*2000;
+		setTimeout(function(){ 
+		
+			if(!game.paused){
+					
+				poligono = 'poligono'+gerar_numero();
+							
+				numero = game.add.sprite(gerar_posicao(), 0, poligono);
+				numero.name = 'Poligono 1';
+				
+				game.physics.arcade.enable(numero, Phaser.Physics.ARCADE);
+				numero.body.velocity.y = 200;
+				numero.inputEnabled = true;
+				numero.input.enableDrag();							
+				//destroySprite(numero);
+				numero.body.collideWorldBounds = true;
+								
+				game.physics.arcade.enable([numero, balde1]);
+				game.physics.arcade.enable([numero, balde2]);
+				game.physics.arcade.enable([numero, balde3]);
+				
+				game.physics.arcade.collide(numero, balde1);
+				game.physics.arcade.collide(numero, balde2);	
+				game.physics.arcade.collide(numero, balde3);	
+			
+			}
+				
+		}, valor);		
+			
+	}
+	
+}
+
+function hitSprite (sprite1, sprite2) {
+
+    sprite1.destroy();
+    sprite2.destroy();
+    
+}
+
+function update(){
+	
+		
+}
+
+function startDrag() {
+
+    //  You can't have a sprite being moved by physics AND input, so we disable the physics while being dragged
+    sprite.body.moves = false;
+
+}
+
+function stopDrag() {
+
+    //  And re-enable it upon release
+    sprite.body.moves = true;
+
+}
+
+
+</script>
+<body>
+</body>
+</html>
